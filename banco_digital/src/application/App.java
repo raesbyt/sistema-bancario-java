@@ -1,6 +1,7 @@
 package application;
 
 import banco.model.IConta;
+import banco.services.ContaService;
 import banco.model.Cliente;
 import banco.model.ContaCorrente;
 import banco.model.ContaPoupanca;
@@ -15,8 +16,10 @@ public class App {
         IConta contaCorrente = new ContaCorrente(cliente1);
         IConta contaPoupanca = new ContaPoupanca(cliente2);
 
-        contaCorrente.depositar(150d);
-        contaCorrente.transferir(55d, contaPoupanca);
+        ContaService service = new ContaService();
+
+        service.depositar(contaCorrente, 220d);
+        service.transferir(contaCorrente, contaPoupanca, 50d);
 
         System.out.println("Imprimindo Extrato:");
         ((ContaCorrente) contaCorrente).imprimirExtrato();
