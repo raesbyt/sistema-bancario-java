@@ -2,27 +2,33 @@ package application;
 
 import banco.model.IConta;
 import banco.services.ContaService;
+import banco.model.Banco;
 import banco.model.Cliente;
 import banco.model.ContaCorrente;
 import banco.model.ContaPoupanca;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("=== Banco Digital ===");
 
-        Cliente cliente1 = new Cliente("João");
-        Cliente cliente2 = new Cliente("Ana");
+        Banco banco = new Banco("Banco Digital");
+        System.out.println("=== " + banco.getNome() + " ===");
 
-        IConta contaCorrente = new ContaCorrente(cliente1);
-        IConta contaPoupanca = new ContaPoupanca(cliente2);
+        ContaCorrente contaCorrente = new ContaCorrente(new Cliente("João"));
+        ContaPoupanca contaPoupanca = new ContaPoupanca(new Cliente("Ana"));
+
+        banco.adicianarConta(contaCorrente);
+        banco.adicianarConta(contaPoupanca);
+
+        IConta cc = banco.buscarContaPorNumero(contaCorrente.getNumero());
+        IConta cp = banco.buscarContaPorNumero(contaPoupanca.getNumero());
 
         ContaService service = new ContaService();
 
-        service.depositar(contaCorrente, 220d);
-        service.transferir(contaCorrente, contaPoupanca, 50d);
+        service.depositar(cc, 220d);
+        service.transferir(cc, cp, 50d);
 
         System.out.println("Imprimindo Extrato:");
-        ((ContaCorrente) contaCorrente).imprimirExtrato();
-        ((ContaPoupanca) contaPoupanca).imprimirExtrato();
+        ((ContaCorrente) cc).imprimirExtrato();
+        ((ContaPoupanca) cp).imprimirExtrato();
     }
 }
